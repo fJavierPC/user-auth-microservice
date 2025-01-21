@@ -77,20 +77,3 @@ def revoke_token(token: str, db: Session = Depends(get_db)):
     repo = BlacklistRepository(db)
     repo.add_token_to_blacklist(token)
     return {"message": "Token has been revoked"}
-
-
-
-@router.get("/login-history", response_model=list[LoginHistoryResponse])
-def get_login_history(
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-    limit: int = 10
-):
-    """
-    Obtiene el historial de inicios de sesión del usuario autenticado.
-    """
-    repo = UserRepository(db)
-    history = repo.get_login_history(user_id=current_user["user_id"], limit=limit)
-
-    # Usar model_validate para mapear objetos ORM al modelo Pydantic
-    return [LoginHistoryResponse.model_validate(h) for h in history]
