@@ -118,3 +118,22 @@ def test_revoke_token(mock_db, monkeypatch):
     response = client.post("v1/auth/revoke-token", json={"token": token})
     assert response.status_code == 200
     assert response.json() == {"message": "Token has been revoked"}
+
+
+@Entity
+@Table(name = "RECEIPTS")
+public class Receipt {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "QUOTE")
+    private String quote;
+
+    @ManyToOne
+    @JoinColumn(name = "POLICY_ID") // Clave foránea a la tabla policies
+    private Policy policy;
+
+    // Getters y Setters
+}
